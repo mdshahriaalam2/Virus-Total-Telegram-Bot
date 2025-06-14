@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  bot:
+    build: .
+    restart: unless-stopped
+    env_file: .env
+    volumes:
+      - ./uploads:/usr/src/app/uploads
+      - ./quarantine:/usr/src/app/quarantine
+      - ./logs:/usr/src/app/logs
+      - ./data:/usr/src/app/data
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:alpine
+    restart: unless-stopped
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+
+volumes:
+  redis_data: 
